@@ -42,13 +42,24 @@ module.exports = {
         try {
             const users = await User.findAll()
             if(!users){
-                res.status(200).json({ message: 'Não existe usuário cadastrado' })
+                res.status(401).json({ message: 'Não existe usuário cadastrado' })
             }
             res.status(200).json({ users })
         } catch (error) {
             res.status(400).json({error})
         }
 
+    },
+    async deleteUser(req, res){
+        const {id} = req.params
+        const user = await User.findOne({where: {id} })
+        if(!user){
+            res.status(401).json({message: 'Não existe usuário'})
+            
+        }else{
+            const user = await User.destroy({where: {id} })
+            res.status(200).json({ok: true})
+        }
     }
 }
 
